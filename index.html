@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Simulation</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script src="vector.js"></script>
+    <script src="utils.js"></script>
+    <script src="particle.js"></script>
+    <script src="main.js"></script>
+
+    <script>
+        // Circle Particle
+        var circleParticle = particle.create(200, 200, 5, Math.PI / 4, 0.1);
+        circleParticle.radius = 10;
+
+        // Square Particle
+        var squareParticle = particle.create(400, 200, 5, Math.PI / 3, 0.1);
+        squareParticle.width = 20;
+        squareParticle.height = 20;
+
+        // Walls
+        var wallLeft = { x: 0, y: 0, width: 10, height: window.innerHeight };
+        var wallRight = { x: window.innerWidth - 10, y: 0, width: 10, height: window.innerHeight };
+        var wallTop = { x: 0, y: 0, width: window.innerWidth, height: 10 };
+        var wallBottom = { x: 0, y: window.innerHeight - 10, width: window.innerWidth, height: 10 };
+
+        // Add particles to the simulation
+        addParticle(circleParticle);
+        addParticle(squareParticle);
+
+        // Render Walls
+        function renderWalls() {
+            context.fillStyle = "#333";
+            context.fillRect(wallLeft.x, wallLeft.y, wallLeft.width, wallLeft.height);
+            context.fillRect(wallRight.x, wallRight.y, wallRight.width, wallRight.height);
+            context.fillRect(wallTop.x, wallTop.y, wallTop.width, wallTop.height);
+            context.fillRect(wallBottom.x, wallBottom.y, wallBottom.width, wallBottom.height);
+        }
+
+        // Modify renderPoints function to include particle shapes
+        function renderPoints() {
+            context.clearRect(0, 0, width, height);
+            renderWalls();
+
+            for(var i = 0; i < points.length; i++) {
+                var p = points[i];
+                context.beginPath();
+
+                if (p.radius) {
+                    context.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                } else if (p.width && p.height) {
+                    context.rect(p.x - p.width / 2, p.y - p.height / 2, p.width, p.height);
+                }
+
+                context.fill();
+            }
+        }
+    </script>
+</body>
+</html>
